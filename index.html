@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Scientific Calculator</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background: #0f172a; color: #fff; font-family: system-ui, sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+    .calc-card { background: #1e293b; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 2rem; width: 100%; max-width: 400px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+    #calc-display { background: #090d16; color: #38bdf8; font-size: 2.2rem; text-align: right; border: 1px solid #334155; border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem; min-height: 70px; word-break: break-all; }
+    .btn-calc { font-size: 1.25rem; font-weight: bold; border-radius: 12px; padding: 1rem 0; border: none; transition: transform 0.1s; }
+    .btn-calc:active { transform: scale(0.95); }
+    .btn-num { background: #334155; color: #fff; }
+    .btn-op { background: #6366f1; color: #fff; }
+    .btn-eq { background: #10b981; color: #fff; }
+    .btn-clear { background: #ef4444; color: #fff; }
+  </style>
+</head>
+<body>
+  <div class="calc-card">
+    <h3 class="h5 mb-3 text-center text-indigo-400">🧮 Interactive Calculator</h3>
+    <div id="calc-display" data-result="0">0</div>
+    <div id="total-sales" style="display:none;">450</div>
+    
+    <div class="row g-2 mb-2">
+      <div class="col-3"><button class="btn btn-calc btn-clear w-100" onclick="calcClear()">C</button></div>
+      <div class="col-3"><button class="btn btn-calc btn-op w-100" onclick="calcOp('/')">/</button></div>
+      <div class="col-3"><button class="btn btn-calc btn-op w-100" onclick="calcOp('*')">×</button></div>
+      <div class="col-3"><button class="btn btn-calc btn-op w-100" onclick="calcOp('-')">-</button></div>
+    </div>
+    <div class="row g-2 mb-2">
+      <div class="col-3"><button class="btn btn-calc btn-num w-100" onclick="calcNum('7')">7</button></div>
+      <div class="col-3"><button class="btn btn-calc btn-num w-100" onclick="calcNum('8')">8</button></div>
+      <div class="col-3"><button class="btn btn-calc btn-num w-100" onclick="calcNum('9')">9</button></div>
+      <div class="col-3"><button class="btn btn-calc btn-op w-100" onclick="calcOp('+')">+</button></div>
+    </div>
+    <div class="row g-2 mb-2">
+      <div class="col-3"><button class="btn btn-calc btn-num w-100" onclick="calcNum('4')">4</button></div>
+      <div class="col-3"><button class="btn btn-calc btn-num w-100" onclick="calcNum('5')">5</button></div>
+      <div class="col-3"><button class="btn btn-calc btn-num w-100" onclick="calcNum('6')">6</button></div>
+      <div class="col-3" rowspan="2"><button class="btn btn-calc btn-eq w-100 h-100" onclick="calcEval()">=</button></div>
+    </div>
+    <div class="row g-2">
+      <div class="col-3"><button class="btn btn-calc btn-num w-100" onclick="calcNum('1')">1</button></div>
+      <div class="col-3"><button class="btn btn-calc btn-num w-100" onclick="calcNum('2')">2</button></div>
+      <div class="col-3"><button class="btn btn-calc btn-num w-100" onclick="calcNum('3')">3</button></div>
+      <div class="col-3"><button class="btn btn-calc btn-num w-100" onclick="calcNum('0')">0</button></div>
+    </div>
+  </div>
+
+  <script>
+    let currentInput = '0';
+    let newNum = true;
+
+    function updateDisplay() {
+      const display = document.getElementById('calc-display');
+      display.textContent = currentInput;
+      display.dataset.result = currentInput;
+    }
+
+    function calcNum(n) {
+      if (currentInput === '0' || newNum) {
+        currentInput = n;
+        newNum = false;
+      } else {
+        currentInput += n;
+      }
+      updateDisplay();
+    }
+
+    function calcOp(op) {
+      currentInput += ' ' + op + ' ';
+      newNum = false;
+      updateDisplay();
+    }
+
+    function calcClear() {
+      currentInput = '0';
+      newNum = true;
+      updateDisplay();
+    }
+
+    function calcEval() {
+      try {
+        const cleanExpr = currentInput.replace(/×/g, '*');
+        const res = eval(cleanExpr);
+        currentInput = String(res);
+        newNum = true;
+        updateDisplay();
+      } catch(e) {
+        currentInput = 'Error';
+        updateDisplay();
+      }
+    }
+  </script>
+</body>
+</html>
